@@ -1,0 +1,50 @@
+---
+title: "HW6"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+library(ggplot2)
+library(ggrepel)
+library(cowplot)
+library(tidyr)
+library(dplyr)
+library(ggridges)
+library(colorspace)
+library(stringr)
+library(forcats)
+load("~/ICA6/house_prices.rda")
+prices <- house_prices
+
+ggplot(data=prices, aes(x=date, y=house_price_index)) +
+  geom_smooth() + facet_wrap(~state, ncol = 10) +
+  scale_x_date(name="Year", date_breaks = '20 years', date_labels = '%y', limits = as.Date(c('1964-01-01', '2026-01-01'), breaks = as.Date(c('1980-01-01', '2020-01-01'))))
+
+
+house_reshaped = gather(prices, measure, value, -date, -state, -house_price_perc)
+
+ggplot(data=house_reshaped, aes(x=date, y=value, group = measure)) +
+  geom_smooth() + facet_wrap(~state, ncol = 10) +
+  scale_x_date(name="Year", date_breaks = '20 years', date_labels = '%y', limits = as.Date(c('1964-01-01', '2026-01-01'), breaks = as.Date(c('1980-01-01', '2020-01-01'))))
+  # This would not be a good graph to display the information due to the values being vastly different from one and other, making it seem like the unemployment percent is close to nothing compared to the house price index.
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
